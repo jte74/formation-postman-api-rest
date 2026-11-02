@@ -38,6 +38,12 @@ public static class ProblemDetailsEnFrancais
         var statut = probleme.Status ?? contexte.HttpContext.Response.StatusCode;
         var requete = contexte.HttpContext.Request;
 
+        // Titre de validation par défaut d'ASP.NET Core => titre français.
+        if (probleme.Title == "One or more validation errors occurred.")
+        {
+            probleme.Title = "La requête contient des erreurs";
+        }
+
         // Titre anglais par défaut ("Not Found", "Method Not Allowed"...) => titre français.
         if ((probleme.Title is null || probleme.Title == ReasonPhrases.GetReasonPhrase(statut))
             && Titres.TryGetValue(statut, out var titre))
@@ -48,10 +54,11 @@ public static class ProblemDetailsEnFrancais
         // Pas d'explication => on en ajoute une, orientée "que dois-je vérifier dans Postman ?".
         probleme.Detail ??= statut switch
         {
+            400 => "Corrigez les éléments listés dans 'errors' puis renvoyez la requête.",
             404 => $"Aucune ressource ne correspond à l'URL '{requete.Path}'. " +
-                   "Vérifie l'orthographe de l'URL (ex. : /api/produits) et l'identifiant demandé.",
+                   "Vérifiez l'orthographe de l'URL (ex. : /api/produits) et l'identifiant demandé.",
             405 => $"La méthode {requete.Method} n'est pas acceptée sur l'URL '{requete.Path}'. " +
-                   "Vérifie la méthode choisie dans Postman et l'URL (l'identifiant est-il oublié ?). " +
+                   "Vérifiez la méthode choisie dans Postman et l'URL (l'identifiant est-il oublié ?). " +
                    "Le header de réponse 'Allow' liste les méthodes acceptées.",
             415 => $"Le format du body ('{requete.ContentType ?? "aucun Content-Type"}') n'est pas supporté. " +
                    "Dans Postman : onglet Body > raw > JSON, afin d'envoyer le header 'Content-Type: application/json'.",

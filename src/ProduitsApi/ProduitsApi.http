@@ -1,0 +1,57 @@
+# =====================================================================================
+# Requêtes de test pour Visual Studio (fichier .http) - bonus pour le formateur
+#
+# Lancer l'API (F5), puis cliquer sur "Envoyer la requête" au-dessus de chaque requête.
+# Pratique pour vérifier l'API sans Postman. Pendant la formation, on utilise Postman.
+# =====================================================================================
+
+@baseUrl = http://localhost:5080
+
+### L'API répond-elle ?
+GET {{baseUrl}}/api/ping
+
+### Obtenir un token (la réponse est mémorisée sous le nom "login")
+# @name login
+POST {{baseUrl}}/api/auth/token
+Content-Type: application/json
+
+{
+  "nomUtilisateur": "admin",
+  "motDePasse": "Admin123!"
+}
+
+### Liste des produits Informatique en stock, triés par prix décroissant
+GET {{baseUrl}}/api/produits?categorie=Informatique&enStock=true&tri=prix&ordre=desc
+
+### Un produit par son identifiant
+GET {{baseUrl}}/api/produits/3
+
+### Créer un produit (utilise le token de la requête "login")
+# @name creation
+POST {{baseUrl}}/api/produits
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "nom": "Support pour ordinateur portable",
+  "description": "Aluminium, hauteur réglable",
+  "prix": 39.90,
+  "categorie": "Bureau",
+  "stock": 10
+}
+
+### Modifier partiellement le produit créé
+PATCH {{baseUrl}}/api/produits/{{creation.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "prix": 34.90
+}
+
+### Supprimer le produit créé
+DELETE {{baseUrl}}/api/produits/{{creation.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### Réinitialiser les données de démonstration
+POST {{baseUrl}}/api/demo/reinitialiser

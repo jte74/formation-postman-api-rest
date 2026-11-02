@@ -26,7 +26,7 @@ public sealed class GestionnaireErreursGlobal(
             Status = StatusCodes.Status500InternalServerError,
             Title = "Erreur interne du serveur",
             Detail = "Une erreur inattendue s'est produite côté serveur. " +
-                     "La requête n'est pas forcément en cause : consulte la console de l'API pour le détail.",
+                     "La requête n'est pas forcément en cause : consultez la console de l'API pour le détail.",
             Instance = httpContext.Request.Path
         };
 

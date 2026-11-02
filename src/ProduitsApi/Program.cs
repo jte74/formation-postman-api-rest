@@ -65,7 +65,7 @@ builder.Services.AddControllers(options =>
                 contexte.ModelState,
                 statusCode: StatusCodes.Status400BadRequest,
                 title: "La requête contient des erreurs",
-                detail: "Corrige les éléments listés dans 'errors' puis renvoie la requête.");
+                detail: "Corrigez les éléments listés dans 'errors' puis renvoyez la requête.");
 
             return new BadRequestObjectResult(probleme) { ContentTypes = { "application/problem+json" } };
         };
@@ -153,7 +153,7 @@ app.UseStatusCodePages();
 // Remarque : pas de app.UseHttpsRedirection() pour rester en HTTP simple pendant la formation locale.
 // En production, une API doit TOUJOURS être servie en HTTPS (sinon le token circule en clair).
 
-// d) Authentification (qui es-tu ? lecture du token) puis autorisation (as-tu le droit ?).
+// d) Authentification (qui êtes-vous ? lecture du token) puis autorisation (avez-vous le droit ?).
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -15,7 +15,7 @@ public class DemoController(ProduitStore store) : ControllerBase
 {
     /// <summary>
     /// Renvoie la méthode, l'URL et tous les headers tels que le serveur les a reçus.
-    /// Astuce : ajoute un header personnalisé dans Postman (ex. "X-Formation: bonjour") et observe-le ici.
+    /// Astuce : ajoutez un header personnalisé dans Postman (ex. "X-Formation: bonjour") et observez-le ici.
     /// </summary>
     [HttpGet("headers")]
     public IActionResult Headers()

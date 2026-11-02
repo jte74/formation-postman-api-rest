@@ -39,6 +39,21 @@ public class ProduitsController(ProduitStore store) : ControllerBase
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     public ActionResult<List<Produit>> Lister([FromQuery] FiltreProduits filtre)
     {
+        // Piège classique : "prixMax=12,90". Dans une URL, le séparateur décimal est le point (12.90) ;
+        // la virgule serait lue comme un séparateur de milliers (1290). On préfère renvoyer une erreur claire.
+        foreach (var cle in new[] { "prixMin", "prixMax" })
+        {
+            if (Request.Query[cle].ToString().Contains(','))
+            {
+                ModelState.AddModelError(cle, $"{cle} : utilisez un point comme séparateur décimal (exemple : 12.90), pas une virgule.");
+            }
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return ValidationProblem(ModelState);
+        }
+
         IEnumerable<Produit> produits = store.ObtenirTous();
 
         if (!string.IsNullOrWhiteSpace(filtre.Categorie))
@@ -214,10 +229,10 @@ public class ProduitsController(ProduitStore store) : ControllerBase
     private ObjectResult ProduitIntrouvable(int id) => Problem(
         statusCode: StatusCodes.Status404NotFound,
         title: "Produit introuvable",
-        detail: $"Aucun produit ne porte l'identifiant {id}. Utilise GET /api/produits pour voir les identifiants existants.");
+        detail: $"Aucun produit ne porte l'identifiant {id}. Utilisez GET /api/produits pour voir les identifiants existants.");
 
     private ObjectResult NomDejaUtilise(string nom, int idExistant) => Problem(
         statusCode: StatusCodes.Status409Conflict,
         title: "Conflit : nom déjà utilisé",
-        detail: $"Un produit nommé '{nom.Trim()}' existe déjà (identifiant {idExistant}). Choisis un autre nom.");
+        detail: $"Un produit nommé '{nom.Trim()}' existe déjà (identifiant {idExistant}). Choisissez un autre nom.");
 }

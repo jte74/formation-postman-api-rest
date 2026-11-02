@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "6f1c2a4e-3b7d-4c55-9a0e-1f2d3c4b5a60",
 		"name": "Formation API REST - Produits",
-		"description": "Collection de la formation **Postman et API REST** (API de démonstration ASP.NET Core .NET 10).\n\n## Avant de commencer\n1. Lance l'API (Visual Studio : F5, ou `dotnet run` dans `src/ProduitsApi`) : http://localhost:5080\n2. Importe aussi l'environnement **Formation API REST - Local** et **sélectionne-le** (menu en haut à droite).\n3. Envoie *00 - Démarrage > Ping*.\n\n## Organisation\nLes dossiers suivent le déroulé du cours : démarrage, authentification, GET, POST, PUT, PATCH, DELETE, erreurs.\n\n## Authentification\nLa collection est configurée en **Bearer Token** = `{{token}}`. Les requêtes héritent de ce réglage, sauf celles réglées explicitement sur *No Auth* (endpoints publics) ou sur un autre token.\n\n## Tests automatiques\nChaque requête contient des tests (onglet **Scripts > Post-response**). Pour tout exécuter d'un coup : clic droit sur la collection > **Run collection** (Collection Runner). Toute la collection est conçue pour passer au vert quand elle est exécutée dans l'ordre.",
+		"description": "Collection de la formation **Postman et API REST** (API de démonstration ASP.NET Core .NET 10).\n\n## Avant de commencer\n1. Lancez l'API (Visual Studio : F5, ou `dotnet run` dans `src/ProduitsApi`) : http://localhost:5080\n2. Importez aussi l'environnement **Formation API REST - Local** et **sélectionnez-le** (menu en haut à droite).\n3. Envoyez *00 - Démarrage > Ping*.\n\n## Organisation\nLes dossiers suivent le déroulé du cours : démarrage, authentification, GET, POST, PUT, PATCH, DELETE, erreurs.\n\n## Authentification\nLa collection est configurée en **Bearer Token** = `{{token}}`. Les requêtes héritent de ce réglage, sauf celles réglées explicitement sur *No Auth* (endpoints publics) ou sur un autre token.\n\n## Tests automatiques\nChaque requête contient des tests (onglet **Scripts > Post-response**). Pour tout exécuter d'un coup : clic droit sur la collection > **Run collection** (Collection Runner). Toute la collection est conçue pour passer au vert quand elle est exécutée dans l'ordre.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"auth": {
@@ -150,7 +150,7 @@
 								"headers"
 							]
 						},
-						"description": "Cet endpoint de démonstration renvoie **tous les headers que le serveur a reçus**.\n\nOn y voit les headers ajoutés automatiquement par Postman (`User-Agent: PostmanRuntime/...`, `Postman-Token`, `Accept-Encoding`, `Host`...) et les headers ajoutés à la main dans l'onglet **Headers** :\n- `X-Formation: bonjour` (header personnalisé)\n- `Accept: application/json` (format de réponse souhaité)\n\n**Exercice :** décoche le header `X-Formation`, renvoie la requête et compare."
+						"description": "Cet endpoint de démonstration renvoie **tous les headers que le serveur a reçus**.\n\nOn y voit les headers ajoutés automatiquement par Postman (`User-Agent: PostmanRuntime/...`, `Postman-Token`, `Accept-Encoding`, `Host`...) et les headers ajoutés à la main dans l'onglet **Headers** :\n- `X-Formation: bonjour` (header personnalisé)\n- `Accept: application/json` (format de réponse souhaité)\n\n**Exercice :** décochez le header `X-Formation`, renvoyez la requête et comparez."
 					},
 					"response": [],
 					"event": [
@@ -401,7 +401,7 @@
 								"moi"
 							]
 						},
-						"description": "Même requête, mais l'authentification est réglée sur **No Auth** : aucun header `Authorization` n'est envoyé.\n\nRésultat attendu : **401 Unauthorized** (« je ne sais pas qui tu es ») et le header de réponse `WWW-Authenticate: Bearer` qui indique la méthode d'authentification attendue.",
+						"description": "Même requête, mais l'authentification est réglée sur **No Auth** : aucun header `Authorization` n'est envoyé.\n\nRésultat attendu : **401 Unauthorized** (« je ne sais pas qui vous êtes ») et le header de réponse `WWW-Authenticate: Bearer` qui indique la méthode d'authentification attendue.",
 						"auth": {
 							"type": "noauth"
 						}
@@ -566,7 +566,7 @@
 								}
 							]
 						},
-						"description": "L'identifiant fait partie du chemin. Dans Postman, la syntaxe `:id` crée une **Path Variable** modifiable dans l'onglet **Params** (section *Path Variables*).\n\nEssaie `id = 1`, `id = 10`, puis `id = 999` (404) et `id = abc` (404 aussi : la route attend un entier)."
+						"description": "L'identifiant fait partie du chemin. Dans Postman, la syntaxe `:id` crée une **Path Variable** modifiable dans l'onglet **Params** (section *Path Variables*).\n\nEssayez `id = 1`, `id = 10`, puis `id = 999` (404) et `id = abc` (404 aussi : la route attend un entier)."
 					},
 					"response": [],
 					"event": [
@@ -612,7 +612,7 @@
 								}
 							]
 						},
-						"description": "Un seul query parameter : `?categorie=Audio`. Modifie la valeur dans l'onglet **Params** : l'URL se met à jour."
+						"description": "Un seul query parameter : `?categorie=Audio`. Modifiez la valeur dans l'onglet **Params** : l'URL se met à jour."
 					},
 					"response": [],
 					"event": [
@@ -679,12 +679,12 @@
 								{
 									"key": "recherche",
 									"value": "souris",
-									"description": "Texte recherché dans le nom ou la description (coche-moi pour essayer).",
+									"description": "Texte recherché dans le nom ou la description (cochez pour essayer).",
 									"disabled": true
 								}
 							]
 						},
-						"description": "Plusieurs query parameters combinés avec `&`. Le paramètre `recherche` est **décoché** : coche-le pour l'ajouter à l'URL."
+						"description": "Plusieurs query parameters combinés avec `&`. Le paramètre `recherche` est **décoché** : cochez-le pour l'ajouter à l'URL."
 					},
 					"response": [],
 					"event": [
@@ -900,7 +900,7 @@
 		},
 		{
 			"name": "03 - Créer un produit (POST)",
-			"description": "La méthode **POST** crée une nouvelle ressource. Les données sont envoyées dans le **body** au format **JSON**.\n\nCes requêtes nécessitent un token : elles **héritent** du Bearer Token configuré sur la collection. Lance d'abord *01 - Authentification > Obtenir un token (admin)*.",
+			"description": "La méthode **POST** crée une nouvelle ressource. Les données sont envoyées dans le **body** au format **JSON**.\n\nCes requêtes nécessitent un token : elles **héritent** du Bearer Token configuré sur la collection. Lancez d'abord *01 - Authentification > Obtenir un token (admin)*.",
 			"item": [
 				{
 					"name": "Créer un produit → 201",
@@ -1535,7 +1535,7 @@
 								"{{produitId}}"
 							]
 						},
-						"description": "Passe le stock à 0. Vérifie ensuite avec `GET /api/produits?enStock=false` que le produit apparaît bien parmi les produits en rupture.",
+						"description": "Passe le stock à 0. Vérifiez ensuite avec `GET /api/produits?enStock=false` que le produit apparaît bien parmi les produits en rupture.",
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"stock\": 0\n}",
@@ -1636,7 +1636,7 @@
 								"{{produitId}}"
 							]
 						},
-						"description": "L'authentification de cette requête utilise `{{tokenUtilisateur}}` (token d'alice, rôle Utilisateur).\n\n**401 ou 403 ?** 401 = l'API ne sait pas qui tu es. 403 = l'API sait qui tu es, mais tu n'as pas le droit.",
+						"description": "L'authentification de cette requête utilise `{{tokenUtilisateur}}` (token d'alice, rôle Utilisateur).\n\n**401 ou 403 ?** 401 = l'API ne sait pas qui vous êtes. 403 = l'API sait qui vous êtes, mais vous n'avez pas le droit.",
 						"auth": {
 							"type": "bearer",
 							"bearer": [
@@ -1791,7 +1791,7 @@
 								"erreur"
 							]
 						},
-						"description": "Endpoint qui provoque volontairement une exception : **500 Internal Server Error**. Le problème vient du **serveur**, pas de la requête. Regarde la console de l'API : l'erreur y est journalisée.",
+						"description": "Endpoint qui provoque volontairement une exception : **500 Internal Server Error**. Le problème vient du **serveur**, pas de la requête. Regardez la console de l'API : l'erreur y est journalisée.",
 						"auth": {
 							"type": "noauth"
 						}

@@ -15,7 +15,7 @@ public class AccueilController : ControllerBase
     {
         api = "API Produits - formation Postman et API REST",
         version = "1.0",
-        message = "L'API fonctionne. Utilise Postman pour envoyer tes requêtes.",
+        message = "L'API fonctionne. Utilisez Postman pour envoyer vos requêtes.",
         documentationOpenApi = "/openapi/v1.json",
         comptesDeDemonstration = new[]
         {

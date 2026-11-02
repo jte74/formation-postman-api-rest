@@ -67,7 +67,7 @@
   <text x="46" y="466" font-size="12.5" fill="#374151"><tspan font-weight="700">Initial value</tspan> : celle du fichier importé, partagée avec</text>
   <text x="46" y="484" font-size="12.5" fill="#374151">l'équipe si l'environnement est synchronisé.</text>
   <text x="46" y="506" font-size="12.5" fill="#374151"><tspan font-weight="700">Current value</tspan> : celle réellement utilisée, modifiée</text>
-  <text x="46" y="524" font-size="12.5" fill="#374151">par les scripts, reste sur ton poste (idéal pour un token).</text>
+  <text x="46" y="524" font-size="12.5" fill="#374151">par les scripts, reste sur votre poste (idéal pour un token).</text>
 
   <text x="500" y="500" font-size="12.5" fill="#374151">Astuce : l'icône « œil » (Environment quick look), en haut à droite,</text>
   <text x="500" y="520" font-size="12.5" fill="#374151">affiche les valeurs courantes. Survoler {{token}} dans une requête aussi.</text>

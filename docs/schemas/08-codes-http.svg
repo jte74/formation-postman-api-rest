@@ -25,7 +25,7 @@
     <rect x="602" y="84" width="184" height="96" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
     <text x="694" y="114" text-anchor="middle" font-size="22" font-weight="800" fill="#c2410c">4xx</text>
     <text x="694" y="138" text-anchor="middle" font-weight="700" fill="#9a3412">Erreur du CLIENT</text>
-    <text x="694" y="160" text-anchor="middle" fill="#374151">« ta requête a un souci »</text>
+    <text x="694" y="160" text-anchor="middle" fill="#374151">« votre requête a un souci »</text>
 
     <rect x="796" y="84" width="184" height="96" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
     <text x="888" y="114" text-anchor="middle" font-size="22" font-weight="800" fill="#b91c1c">5xx</text>
