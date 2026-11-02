@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!--
+    API de démonstration pour la formation "Postman et API REST".
+    Projet ASP.NET Core .NET 10, sans base de données (stockage en mémoire).
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ProduitsApi</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Validation des jetons JWT envoyés dans le header "Authorization: Bearer <token>" -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.14" />
+    <!-- Génère la description de l'API au format OpenAPI : http://localhost:5080/openapi/v1.json -->
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.14" />
+  </ItemGroup>
+
+</Project>

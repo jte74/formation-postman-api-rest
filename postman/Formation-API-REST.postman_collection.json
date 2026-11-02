@@ -1,0 +1,1899 @@
+{
+	"info": {
+		"_postman_id": "6f1c2a4e-3b7d-4c55-9a0e-1f2d3c4b5a60",
+		"name": "Formation API REST - Produits",
+		"description": "Collection de la formation **Postman et API REST** (API de démonstration ASP.NET Core .NET 10).\n\n## Avant de commencer\n1. Lance l'API (Visual Studio : F5, ou `dotnet run` dans `src/ProduitsApi`) : http://localhost:5080\n2. Importe aussi l'environnement **Formation API REST - Local** et **sélectionne-le** (menu en haut à droite).\n3. Envoie *00 - Démarrage > Ping*.\n\n## Organisation\nLes dossiers suivent le déroulé du cours : démarrage, authentification, GET, POST, PUT, PATCH, DELETE, erreurs.\n\n## Authentification\nLa collection est configurée en **Bearer Token** = `{{token}}`. Les requêtes héritent de ce réglage, sauf celles réglées explicitement sur *No Auth* (endpoints publics) ou sur un autre token.\n\n## Tests automatiques\nChaque requête contient des tests (onglet **Scripts > Post-response**). Pour tout exécuter d'un coup : clic droit sur la collection > **Run collection** (Collection Runner). Toute la collection est conçue pour passer au vert quand elle est exécutée dans l'ordre.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script de COLLECTION exécuté AVANT chaque requête.",
+					"// Il affiche dans la Console Postman (en bas de la fenêtre) la requête qui part, variables remplacées.",
+					"console.log(pm.request.method + \" \" + pm.variables.replaceIn(pm.request.url.toString()));"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script de COLLECTION exécuté APRÈS chaque requête, en plus des tests propres à chaque requête.",
+					"pm.test(\"[Collection] Temps de réponse inférieur à 2 secondes\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});"
+				]
+			}
+		}
+	],
+	"item": [
+		{
+			"name": "00 - Démarrage",
+			"description": "Premières requêtes : vérifier que l'API répond et observer l'anatomie d'une requête et d'une réponse HTTP.\n\nCes endpoints sont **publics** : l'authentification du dossier est réglée sur **No Auth**.",
+			"item": [
+				{
+					"name": "Ping - l'API répond-elle ?",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/ping",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ping"
+							]
+						},
+						"description": "La toute première requête de la formation.\n\n**À observer dans la réponse :** le code `200 OK`, le temps de réponse (ms), la taille, le body JSON (`message: \"pong\"`) et l'onglet **Headers** de la réponse (`Content-Type: application/json`)."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Tests exécutés automatiquement après la réception de la réponse.",
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La réponse est du JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Le message vaut 'pong'\", function () {",
+									"    const reponse = pm.response.json();",
+									"    pm.expect(reponse.message).to.eql(\"pong\");",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Page d'accueil de l'API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": []
+						},
+						"description": "Renvoie la liste des endpoints disponibles et les comptes de démonstration. C'est aussi la page qui s'ouvre dans le navigateur au lancement de l'API."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La liste des endpoints est présente\", function () {",
+									"    const reponse = pm.response.json();",
+									"    pm.expect(reponse.endpoints).to.be.an(\"array\").that.is.not.empty;",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Voir les headers envoyés par Postman",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Formation",
+								"value": "bonjour",
+								"type": "text",
+								"description": "Header personnalisé : le préfixe X- est une convention pour les headers non standard."
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"description": "Format de réponse souhaité par le client."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/demo/headers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"demo",
+								"headers"
+							]
+						},
+						"description": "Cet endpoint de démonstration renvoie **tous les headers que le serveur a reçus**.\n\nOn y voit les headers ajoutés automatiquement par Postman (`User-Agent: PostmanRuntime/...`, `Postman-Token`, `Accept-Encoding`, `Host`...) et les headers ajoutés à la main dans l'onglet **Headers** :\n- `X-Formation: bonjour` (header personnalisé)\n- `Accept: application/json` (format de réponse souhaité)\n\n**Exercice :** décoche le header `X-Formation`, renvoie la requête et compare."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Le serveur a bien reçu le header X-Formation\", function () {",
+									"    const reponse = pm.response.json();",
+									"    pm.expect(reponse.headersRecus[\"X-Formation\"]).to.eql(\"bonjour\");",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Réinitialiser les données de démo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/demo/reinitialiser",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"demo",
+								"reinitialiser"
+							]
+						},
+						"description": "Outil du formateur : remet les **10 produits de démonstration** (identifiants 1 à 10) et supprime les produits créés pendant les exercices.\n\nÀ lancer avant un exercice ou avant d'exécuter toute la collection avec le **Collection Runner**."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Les 10 produits de démonstration sont restaurés\", function () {",
+									"    pm.expect(pm.response.json().nombreProduits).to.eql(10);",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			}
+		},
+		{
+			"name": "01 - Authentification",
+			"description": "Obtenir un **Bearer Token** et l'utiliser.\n\n1. `POST /api/auth/token` avec un identifiant et un mot de passe : l'API renvoie un token (JWT).\n2. Le script **Post-response** enregistre automatiquement ce token dans la variable d'environnement `token`.\n3. La collection est configurée (onglet **Authorization** de la collection) en **Bearer Token** = `{{token}}` : toutes les requêtes qui héritent de cette configuration envoient le header `Authorization: Bearer <token>`.\n\nComptes : `admin / Admin123!` (rôle Admin) et `alice / Alice123!` (rôle Utilisateur, ne peut pas supprimer).",
+			"item": [
+				{
+					"name": "Obtenir un token (admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"token"
+							]
+						},
+						"description": "Échange l'identifiant et le mot de passe (variables d'environnement `nomUtilisateur` et `motDePasse`) contre un token.\n\nL'authentification de cette requête est **No Auth** : on n'a pas encore de token !\n\nLe script de l'onglet **Scripts > Post-response** enregistre le token reçu dans la variable `token`.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nomUtilisateur\": \"{{nomUtilisateur}}\",\n  \"motDePasse\": \"{{motDePasse}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const reponse = pm.response.json();",
+									"",
+									"pm.test(\"La réponse contient un token de type Bearer\", function () {",
+									"    pm.expect(reponse.accessToken).to.be.a(\"string\").and.not.be.empty;",
+									"    pm.expect(reponse.tokenType).to.eql(\"Bearer\");",
+									"});",
+									"",
+									"// Enregistrement automatique du token dans l'environnement :",
+									"// les autres requêtes l'utiliseront via {{token}}.",
+									"if (pm.response.code === 200) {",
+									"    pm.environment.set(\"token\", reponse.accessToken);",
+									"    console.log(\"Token enregistré dans la variable d'environnement 'token' (valable \" + reponse.expiresIn + \" s).\");",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Obtenir un token (alice, rôle Utilisateur)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"token"
+							]
+						},
+						"description": "Token d'un second compte, **alice**, qui a le rôle `Utilisateur` : elle peut créer et modifier des produits mais **pas les supprimer** (403 Forbidden).\n\nLe token est enregistré dans la variable `tokenUtilisateur`.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nomUtilisateur\": \"alice\",\n  \"motDePasse\": \"Alice123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const reponse = pm.response.json();",
+									"",
+									"pm.test(\"Le rôle d'alice est Utilisateur\", function () {",
+									"    pm.expect(reponse.role).to.eql(\"Utilisateur\");",
+									"});",
+									"",
+									"if (pm.response.code === 200) {",
+									"    pm.environment.set(\"tokenUtilisateur\", reponse.accessToken);",
+									"    console.log(\"Token d'alice enregistré dans la variable 'tokenUtilisateur'.\");",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Qui suis-je ? (avec token)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/moi",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"moi"
+							]
+						},
+						"description": "Endpoint **protégé** par `[Authorize]`. L'authentification est **héritée de la collection** (Bearer Token `{{token}}`).\n\nLa réponse affiche le contenu (claims) du token : `sub`, `role`, `exp`..."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Le token correspond à l'utilisateur de l'environnement\", function () {",
+									"    const reponse = pm.response.json();",
+									"    pm.expect(reponse.nomUtilisateur).to.eql(pm.environment.get(\"nomUtilisateur\"));",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Qui suis-je ? (sans token) → 401",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/moi",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"moi"
+							]
+						},
+						"description": "Même requête, mais l'authentification est réglée sur **No Auth** : aucun header `Authorization` n'est envoyé.\n\nRésultat attendu : **401 Unauthorized** (« je ne sais pas qui tu es ») et le header de réponse `WWW-Authenticate: Bearer` qui indique la méthode d'authentification attendue.",
+						"auth": {
+							"type": "noauth"
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Le header WWW-Authenticate indique le schéma Bearer\", function () {",
+									"    pm.response.to.have.header(\"WWW-Authenticate\");",
+									"    pm.expect(pm.response.headers.get(\"WWW-Authenticate\")).to.include(\"Bearer\");",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Mauvais mot de passe → 401",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"token"
+							]
+						},
+						"description": "Identifiants incorrects : l'API refuse de délivrer un token (**401**).",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nomUtilisateur\": \"admin\",\n  \"motDePasse\": \"mauvais-mot-de-passe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Aucun token n'est renvoyé\", function () {",
+									"    pm.expect(pm.response.json()).to.not.have.property(\"accessToken\");",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "02 - Lire des produits (GET)",
+			"description": "La méthode **GET** lit des données sans rien modifier. Ces endpoints sont publics (**No Auth**).\n\n- **Paramètre de route** : fait partie du chemin, identifie UNE ressource → `/api/produits/3`\n- **Query parameters** : après le `?`, séparés par `&`, filtrent/trient/paginent → `/api/produits?categorie=Audio`",
+			"item": [
+				{
+					"name": "Lister tous les produits",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"description": "Format de réponse souhaité."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							]
+						},
+						"description": "Renvoie un tableau JSON de produits.\n\n**À observer :** le header de réponse `X-Total-Count` (nombre total de produits trouvés)."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const produits = pm.response.json();",
+									"",
+									"pm.test(\"La réponse est un tableau non vide\", function () {",
+									"    pm.expect(produits).to.be.an(\"array\").that.is.not.empty;",
+									"});",
+									"",
+									"pm.test(\"Chaque produit possède id, nom, prix, categorie et stock\", function () {",
+									"    produits.forEach(function (produit) {",
+									"        pm.expect(produit).to.include.all.keys(\"id\", \"nom\", \"prix\", \"categorie\", \"stock\");",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Le header X-Total-Count est présent\", function () {",
+									"    pm.response.to.have.header(\"X-Total-Count\");",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Obtenir un produit par son id (paramètre de route)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3",
+									"description": "Identifiant du produit (paramètre de route)."
+								}
+							]
+						},
+						"description": "L'identifiant fait partie du chemin. Dans Postman, la syntaxe `:id` crée une **Path Variable** modifiable dans l'onglet **Params** (section *Path Variables*).\n\nEssaie `id = 1`, `id = 10`, puis `id = 999` (404) et `id = abc` (404 aussi : la route attend un entier)."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Le produit renvoyé a l'identifiant demandé\", function () {",
+									"    // Dernier segment de l'URL réellement envoyée : /api/produits/3 -> \"3\"",
+									"    const segments = pm.request.url.path;",
+									"    const idDemande = Number(segments[segments.length - 1]);",
+									"    pm.expect(pm.response.json().id).to.eql(idDemande);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Filtrer par catégorie (query param)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits?categorie=Audio",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							],
+							"query": [
+								{
+									"key": "categorie",
+									"value": "Audio",
+									"description": "Ne garder que cette catégorie : Informatique, Audio ou Bureau."
+								}
+							]
+						},
+						"description": "Un seul query parameter : `?categorie=Audio`. Modifie la valeur dans l'onglet **Params** : l'URL se met à jour."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Tous les produits sont de la catégorie demandée\", function () {",
+									"    const categorie = pm.request.url.query.get(\"categorie\");",
+									"    pm.response.json().forEach(function (produit) {",
+									"        pm.expect(produit.categorie.toLowerCase()).to.eql(categorie.toLowerCase());",
+									"    });",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Filtres combinés et tri",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits?categorie=Informatique&enStock=true&prixMax=100&tri=prix&ordre=desc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							],
+							"query": [
+								{
+									"key": "categorie",
+									"value": "Informatique",
+									"description": "Catégorie."
+								},
+								{
+									"key": "enStock",
+									"value": "true",
+									"description": "true = disponibles uniquement, false = en rupture."
+								},
+								{
+									"key": "prixMax",
+									"value": "100",
+									"description": "Prix maximum (inclus)."
+								},
+								{
+									"key": "tri",
+									"value": "prix",
+									"description": "Champ de tri : id, nom, prix ou stock."
+								},
+								{
+									"key": "ordre",
+									"value": "desc",
+									"description": "asc (croissant) ou desc (décroissant)."
+								},
+								{
+									"key": "recherche",
+									"value": "souris",
+									"description": "Texte recherché dans le nom ou la description (coche-moi pour essayer).",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Plusieurs query parameters combinés avec `&`. Le paramètre `recherche` est **décoché** : coche-le pour l'ajouter à l'URL."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const produits = pm.response.json();",
+									"",
+									"pm.test(\"Produits Informatique, en stock, à 100 € maximum\", function () {",
+									"    produits.forEach(function (produit) {",
+									"        pm.expect(produit.categorie).to.eql(\"Informatique\");",
+									"        pm.expect(produit.stock).to.be.above(0);",
+									"        pm.expect(produit.prix).to.be.at.most(100);",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Produits triés par prix décroissant\", function () {",
+									"    for (let i = 1; i < produits.length; i++) {",
+									"        pm.expect(produits[i - 1].prix).to.be.at.least(produits[i].prix);",
+									"    }",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Rechercher un texte (sans accent)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits?recherche=ecran",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							],
+							"query": [
+								{
+									"key": "recherche",
+									"value": "ecran",
+									"description": "Recherche insensible aux majuscules et aux accents."
+								}
+							]
+						},
+						"description": "La recherche ignore les majuscules et les accents : `ecran` trouve « Écran 27 pouces »."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Au moins un produit trouvé\", function () {",
+									"    pm.expect(pm.response.json()).to.be.an(\"array\").that.is.not.empty;",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Pagination (page et taille)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits?page=2&taille=3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"description": "Numéro de page (à partir de 1)."
+								},
+								{
+									"key": "taille",
+									"value": "3",
+									"description": "Nombre de produits par page (1 à 50)."
+								}
+							]
+						},
+						"description": "Page 2, avec 3 produits par page. Le header `X-Total-Count` donne le nombre total de produits, toutes pages confondues."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Au plus 3 produits dans la page\", function () {",
+									"    pm.expect(pm.response.json().length).to.be.at.most(3);",
+									"});",
+									"",
+									"pm.test(\"X-Total-Count indique le total (toutes pages)\", function () {",
+									"    const total = Number(pm.response.headers.get(\"X-Total-Count\"));",
+									"    pm.expect(total).to.be.at.least(pm.response.json().length);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Produit inexistant → 404",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"999"
+							]
+						},
+						"description": "Aucun produit n'a l'identifiant 999 : **404 Not Found**, avec un body JSON explicatif (format *ProblemDetails*)."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 404 Not Found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Le message d'erreur explique le problème\", function () {",
+									"    pm.expect(pm.response.json().title).to.eql(\"Produit introuvable\");",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Query param invalide → 400",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits?taille=500",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							],
+							"query": [
+								{
+									"key": "taille",
+									"value": "500",
+									"description": "Invalide : la taille maximale est 50."
+								}
+							]
+						},
+						"description": "`taille=500` dépasse la limite autorisée (50) : **400 Bad Request**. Le champ `errors` liste chaque problème."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"L'erreur concerne le paramètre 'taille'\", function () {",
+									"    pm.expect(pm.response.json().errors).to.have.property(\"taille\");",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			}
+		},
+		{
+			"name": "03 - Créer un produit (POST)",
+			"description": "La méthode **POST** crée une nouvelle ressource. Les données sont envoyées dans le **body** au format **JSON**.\n\nCes requêtes nécessitent un token : elles **héritent** du Bearer Token configuré sur la collection. Lance d'abord *01 - Authentification > Obtenir un token (admin)*.",
+			"item": [
+				{
+					"name": "Créer un produit → 201",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							]
+						},
+						"description": "Crée un produit. Réponse attendue : **201 Created**, le produit créé (avec son `id` attribué par le serveur) et le header **Location** contenant l'URL du nouveau produit.\n\nLe script Post-response enregistre l'identifiant dans la variable `produitId`, utilisée par les requêtes PUT, PATCH et DELETE.\n\nEnvoyée deux fois de suite, cette requête renvoie **409 Conflict** (nom déjà utilisé).",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Tapis de souris XXL\",\n  \"description\": \"Tapis 90 x 40 cm, base antidérapante\",\n  \"prix\": 19.9,\n  \"categorie\": \"Informatique\",\n  \"stock\": 25\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Le header Location donne l'URL du nouveau produit\", function () {",
+									"    pm.response.to.have.header(\"Location\");",
+									"});",
+									"",
+									"const produit = pm.response.json();",
+									"",
+									"pm.test(\"Le produit créé contient les valeurs envoyées\", function () {",
+									"    pm.expect(produit.id).to.be.a(\"number\");",
+									"    pm.expect(produit.nom).to.eql(\"Tapis de souris XXL\");",
+									"    pm.expect(produit.prix).to.eql(19.9);",
+									"    pm.expect(produit.stock).to.eql(25);",
+									"});",
+									"",
+									"// On mémorise l'identifiant pour les requêtes suivantes (PUT, PATCH, DELETE).",
+									"if (pm.response.code === 201) {",
+									"    pm.environment.set(\"produitId\", produit.id);",
+									"    console.log(\"Produit créé avec l'id \" + produit.id + \" (variable 'produitId').\");",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Créer sans token → 401",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							]
+						},
+						"description": "Même requête avec l'authentification réglée sur **No Auth** : **401 Unauthorized**.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Tapis de souris XXL\",\n  \"description\": \"Tapis 90 x 40 cm, base antidérapante\",\n  \"prix\": 19.9,\n  \"categorie\": \"Informatique\",\n  \"stock\": 25\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Créer un produit invalide → 400",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							]
+						},
+						"description": "Le body ne respecte pas les règles : nom trop court, prix négatif, catégorie et stock absents. Réponse : **400 Bad Request** et la liste des erreurs, champ par champ, dans `errors`.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"X\",\n  \"prix\": -5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Chaque champ en erreur est signalé\", function () {",
+									"    const erreurs = pm.response.json().errors;",
+									"    pm.expect(erreurs).to.include.all.keys(\"nom\", \"prix\", \"categorie\", \"stock\");",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Créer un doublon → 409",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							]
+						},
+						"description": "Même nom qu'un produit existant (celui créé juste avant) : **409 Conflict**.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Tapis de souris XXL\",\n  \"description\": \"Tapis 90 x 40 cm, base antidérapante\",\n  \"prix\": 19.9,\n  \"categorie\": \"Informatique\",\n  \"stock\": 25\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 409 Conflict\", function () {",
+									"    pm.response.to.have.status(409);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Body au format texte → 415",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/plain",
+								"type": "text",
+								"description": "Mauvais type de contenu (volontaire)."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							]
+						},
+						"description": "Le body est envoyé en **Text** (`Content-Type: text/plain`) au lieu de **JSON** : **415 Unsupported Media Type**. C'est l'erreur typique quand on oublie de choisir *JSON* dans *Body > raw*.",
+						"body": {
+							"mode": "raw",
+							"raw": "nom=Tapis de souris&prix=19.90",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 415 Unsupported Media Type\", function () {",
+									"    pm.response.to.have.status(415);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "JSON mal formé → 400",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							]
+						},
+						"description": "Le JSON contient une **virgule en trop** après le dernier champ (Postman la souligne en rouge). Le serveur ne peut pas le lire : **400 Bad Request**, erreur sur le champ `$` (la racine du JSON).",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Produit mal formé\",\n  \"prix\": 10,\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"L'erreur porte sur la syntaxe du JSON ($)\", function () {",
+									"    pm.expect(pm.response.json().errors).to.have.property(\"$\");",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "04 - Remplacer un produit (PUT)",
+			"description": "La méthode **PUT** remplace **entièrement** une ressource existante : on envoie sa représentation **complète**.\n\nUn champ facultatif absent du body est **effacé** (ici, la `description` devient `null`).",
+			"item": [
+				{
+					"name": "Remplacer entièrement le produit créé → 200",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/{{produitId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"{{produitId}}"
+							]
+						},
+						"description": "Remplace le produit créé dans le dossier 03 (variable `produitId`).\n\nLe body ne contient **pas** de `description` : après le PUT, elle vaut `null`. C'est la différence essentielle avec PATCH.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Tapis de souris XXL Pro\",\n  \"prix\": 24.9,\n  \"categorie\": \"Informatique\",\n  \"stock\": 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const produit = pm.response.json();",
+									"",
+									"pm.test(\"Les nouvelles valeurs sont appliquées\", function () {",
+									"    pm.expect(produit.nom).to.eql(\"Tapis de souris XXL Pro\");",
+									"    pm.expect(produit.prix).to.eql(24.9);",
+									"    pm.expect(produit.stock).to.eql(30);",
+									"});",
+									"",
+									"pm.test(\"PUT remplace tout : la description absente du body est effacée\", function () {",
+									"    pm.expect(produit.description).to.be.null;",
+									"});",
+									"",
+									"pm.test(\"La date de modification est renseignée\", function () {",
+									"    pm.expect(produit.dateModification).to.not.be.null;",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PUT incomplet → 400",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/{{produitId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"{{produitId}}"
+							]
+						},
+						"description": "Avec PUT, tous les champs obligatoires doivent être présents. Envoyer seulement le prix provoque une **400**. (Pour ne modifier que le prix, il faut utiliser **PATCH**.)",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prix\": 29.9\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Les champs manquants sont signalés\", function () {",
+									"    pm.expect(pm.response.json().errors).to.include.all.keys(\"nom\", \"categorie\", \"stock\");",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PUT sur un produit inexistant → 404",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"999"
+							]
+						},
+						"description": "On ne peut remplacer qu'un produit qui existe : **404 Not Found**.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Produit fantôme\",\n  \"prix\": 1.0,\n  \"categorie\": \"Bureau\",\n  \"stock\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 404 Not Found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PUT sans identifiant dans l'URL → 405",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits"
+							]
+						},
+						"description": "Oubli de l'identifiant dans l'URL : la route `/api/produits` existe, mais n'accepte pas PUT. Réponse : **405 Method Not Allowed** et le header `Allow: GET, POST` (méthodes acceptées).",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Tapis de souris XXL Pro\",\n  \"prix\": 24.9,\n  \"categorie\": \"Informatique\",\n  \"stock\": 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 405 Method Not Allowed\", function () {",
+									"    pm.response.to.have.status(405);",
+									"});",
+									"",
+									"pm.test(\"Le header Allow liste les méthodes acceptées\", function () {",
+									"    pm.response.to.have.header(\"Allow\");",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "05 - Modifier partiellement (PATCH)",
+			"description": "La méthode **PATCH** modifie **seulement les champs envoyés**. Les autres restent inchangés.",
+			"item": [
+				{
+					"name": "Modifier uniquement le prix → 200",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/{{produitId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"{{produitId}}"
+							]
+						},
+						"description": "Body minimal : `{ \"prix\": 17.50 }`. Le nom, la catégorie et le stock ne changent pas.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prix\": 17.5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const produit = pm.response.json();",
+									"",
+									"pm.test(\"Le prix est modifié\", function () {",
+									"    pm.expect(produit.prix).to.eql(17.5);",
+									"});",
+									"",
+									"pm.test(\"Les autres champs sont inchangés\", function () {",
+									"    pm.expect(produit.nom).to.eql(\"Tapis de souris XXL Pro\");",
+									"    pm.expect(produit.stock).to.eql(30);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Mettre en rupture de stock → 200",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/{{produitId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"{{produitId}}"
+							]
+						},
+						"description": "Passe le stock à 0. Vérifie ensuite avec `GET /api/produits?enStock=false` que le produit apparaît bien parmi les produits en rupture.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stock\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Le stock vaut 0\", function () {",
+									"    pm.expect(pm.response.json().stock).to.eql(0);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "PATCH sans champ reconnu → 400",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"description": "Indique au serveur que le body est du JSON."
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/{{produitId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"{{produitId}}"
+							]
+						},
+						"description": "Faute de frappe dans le nom du champ (`prixx`) : le champ est ignoré, il ne reste rien à modifier → **400**.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prixx\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "06 - Supprimer un produit (DELETE)",
+			"description": "La méthode **DELETE** supprime une ressource. En cas de succès : **204 No Content** (pas de body).\n\nLa suppression exige un token **et** le rôle **Admin** : avec le token d'alice, la réponse est **403 Forbidden**.",
+			"item": [
+				{
+					"name": "Supprimer avec le compte alice → 403",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/{{produitId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"{{produitId}}"
+							]
+						},
+						"description": "L'authentification de cette requête utilise `{{tokenUtilisateur}}` (token d'alice, rôle Utilisateur).\n\n**401 ou 403 ?** 401 = l'API ne sait pas qui tu es. 403 = l'API sait qui tu es, mais tu n'as pas le droit.",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenUtilisateur}}",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 403 Forbidden\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Supprimer le produit créé → 204",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/{{produitId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"{{produitId}}"
+							]
+						},
+						"description": "Suppression avec le token admin (hérité de la collection). Réponse : **204 No Content**, body vide."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 204 No Content\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"pm.test(\"Le body est vide\", function () {",
+									"    pm.expect(pm.response.text()).to.be.empty;",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Vérifier la suppression (GET) → 404",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/{{produitId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"{{produitId}}"
+							]
+						},
+						"description": "Le produit n'existe plus : **404 Not Found**.",
+						"auth": {
+							"type": "noauth"
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 404 Not Found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Supprimer à nouveau → 404",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produits/{{produitId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produits",
+								"{{produitId}}"
+							]
+						},
+						"description": "On ne peut pas supprimer deux fois la même ressource : **404 Not Found**. (L'état du serveur reste le même : DELETE est dit *idempotent*.)"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 404 Not Found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "07 - Erreurs et cas particuliers",
+			"description": "Quelques erreurs à savoir reconnaître. Toutes les erreurs de l'API ont le même format JSON (*ProblemDetails*) : `type`, `title`, `status`, `detail`, `instance`, `traceId`.",
+			"item": [
+				{
+					"name": "Erreur serveur → 500",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/demo/erreur",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"demo",
+								"erreur"
+							]
+						},
+						"description": "Endpoint qui provoque volontairement une exception : **500 Internal Server Error**. Le problème vient du **serveur**, pas de la requête. Regarde la console de l'API : l'erreur y est journalisée.",
+						"auth": {
+							"type": "noauth"
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 500 Internal Server Error\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});",
+									"",
+									"pm.test(\"Le body explique l'erreur (format ProblemDetails)\", function () {",
+									"    pm.expect(pm.response.json()).to.include.all.keys(\"title\", \"status\", \"detail\");",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "URL mal orthographiée → 404",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produit",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"produit"
+							]
+						},
+						"description": "Il manque le **s** de `produits` : aucune route ne correspond → **404 Not Found**.",
+						"auth": {
+							"type": "noauth"
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 404 Not Found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Token invalide → 401",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/moi",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"moi"
+							]
+						},
+						"description": "Le token envoyé n'est pas un JWT valide (mal copié, modifié ou inventé) : **401 Unauthorized**.",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ceci-n-est-pas-un-vrai-token",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Statut 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

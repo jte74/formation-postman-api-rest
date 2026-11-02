@@ -1,0 +1,12 @@
+# Visual Studio / .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+TestResults/
+
+# Divers
+.DS_Store
+.idea/
+*.log

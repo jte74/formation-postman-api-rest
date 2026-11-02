@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title>Variables et environnements Postman</title>
+  <defs>
+    <marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="560" fill="#ffffff"/>
+
+  <text x="500" y="36" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Variables et environnements Postman</text>
+  <text x="500" y="62" text-anchor="middle" font-size="15" fill="#475569">Écrire {{baseUrl}} au lieu de http://localhost:5080 : on change la valeur à UN seul endroit</text>
+
+  <!-- Portées -->
+  <text x="30" y="100" font-size="15" font-weight="700" fill="#0f172a">Les portées (de la plus large à la plus précise)</text>
+  <g font-size="13">
+    <rect x="30" y="114" width="420" height="50" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="46" y="136" font-weight="700" fill="#334155">Globales</text>
+    <text x="46" y="154" fill="#4b5563">tout l'espace de travail (à éviter pour débuter)</text>
+
+    <rect x="55" y="172" width="395" height="50" rx="8" fill="#f5f3ff" stroke="#a78bfa"/>
+    <text x="71" y="194" font-weight="700" fill="#5b21b6">Collection</text>
+    <text x="71" y="212" fill="#4b5563">partagées par toutes les requêtes de la collection</text>
+
+    <rect x="80" y="230" width="370" height="62" rx="8" fill="#fff7ed" stroke="#f97316" stroke-width="2.5"/>
+    <text x="96" y="252" font-weight="700" fill="#c2410c">Environnement  ← utilisé dans la formation</text>
+    <text x="96" y="270" fill="#4b5563">un jeu de valeurs par cible : Local, Recette, Prod</text>
+    <text x="96" y="286" fill="#4b5563">baseUrl, token, produitId...</text>
+
+    <rect x="105" y="300" width="345" height="50" rx="8" fill="#ecfdf5" stroke="#34d399"/>
+    <text x="121" y="322" font-weight="700" fill="#047857">Locales</text>
+    <text x="121" y="340" fill="#4b5563">le temps d'une requête (pm.variables.set)</text>
+  </g>
+  <text x="30" y="378" font-size="12.5" fill="#374151">Si le même nom existe à plusieurs niveaux, <tspan font-weight="700">la portée la plus précise gagne</tspan>.</text>
+  <text x="30" y="398" font-size="12.5" fill="#374151">Variable introuvable : <tspan font-family="Consolas, Menlo, monospace">{{baseUrl}}</tspan> est envoyé tel quel → erreur.</text>
+
+  <!-- Flux du token -->
+  <text x="500" y="100" font-size="15" font-weight="700" fill="#0f172a">Le trajet du token, automatisé par un script</text>
+  <g font-size="13">
+    <rect x="500" y="114" width="470" height="64" rx="10" fill="#ecfdf5" stroke="#10b981"/>
+    <text x="516" y="138" font-weight="700" fill="#047857">1. Réponse de POST /api/auth/token</text>
+    <text x="516" y="160" font-family="Consolas, Menlo, monospace" font-size="12.5" fill="#1f2937">{ "accessToken": "eyJhbGciOi...", ... }</text>
+
+    <line x1="735" y1="180" x2="735" y2="200" stroke="#334155" stroke-width="2" marker-end="url(#fl)"/>
+
+    <rect x="500" y="204" width="470" height="78" rx="10" fill="#fff7ed" stroke="#fb923c"/>
+    <text x="516" y="228" font-weight="700" fill="#9a3412">2. Script « Post-response » de la requête</text>
+    <text x="516" y="250" font-family="Consolas, Menlo, monospace" font-size="12.5" fill="#1f2937">const reponse = pm.response.json();</text>
+    <text x="516" y="270" font-family="Consolas, Menlo, monospace" font-size="12.5" fill="#1f2937">pm.environment.set("token", reponse.accessToken);</text>
+
+    <line x1="735" y1="284" x2="735" y2="304" stroke="#334155" stroke-width="2" marker-end="url(#fl)"/>
+
+    <rect x="500" y="308" width="470" height="56" rx="10" fill="#ffffff" stroke="#f97316" stroke-width="2"/>
+    <text x="516" y="332" font-weight="700" fill="#c2410c">3. Environnement « Formation API REST - Local »</text>
+    <text x="516" y="352" font-family="Consolas, Menlo, monospace" font-size="12.5" fill="#1f2937">token = eyJhbGciOi...</text>
+
+    <line x1="735" y1="366" x2="735" y2="386" stroke="#334155" stroke-width="2" marker-end="url(#fl)"/>
+
+    <rect x="500" y="390" width="470" height="78" rx="10" fill="#eff6ff" stroke="#3b82f6"/>
+    <text x="516" y="414" font-weight="700" fill="#1e3a8a">4. Toutes les requêtes protégées (auth héritée)</text>
+    <text x="516" y="436" fill="#374151">Collection → Authorization → Bearer Token = <tspan font-family="Consolas, Menlo, monospace">{{token}}</tspan></text>
+    <text x="516" y="456" font-family="Consolas, Menlo, monospace" font-size="12.5" fill="#1f2937">Authorization: Bearer eyJhbGciOi...</text>
+  </g>
+
+  <!-- Valeur initiale / courante -->
+  <rect x="30" y="420" width="440" height="122" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="46" y="444" font-size="14" font-weight="700" fill="#0f172a">Valeur initiale ou valeur courante ?</text>
+  <text x="46" y="466" font-size="12.5" fill="#374151"><tspan font-weight="700">Initial value</tspan> : celle du fichier importé, partagée avec</text>
+  <text x="46" y="484" font-size="12.5" fill="#374151">l'équipe si l'environnement est synchronisé.</text>
+  <text x="46" y="506" font-size="12.5" fill="#374151"><tspan font-weight="700">Current value</tspan> : celle réellement utilisée, modifiée</text>
+  <text x="46" y="524" font-size="12.5" fill="#374151">par les scripts, reste sur ton poste (idéal pour un token).</text>
+
+  <text x="500" y="500" font-size="12.5" fill="#374151">Astuce : l'icône « œil » (Environment quick look), en haut à droite,</text>
+  <text x="500" y="520" font-size="12.5" fill="#374151">affiche les valeurs courantes. Survoler {{token}} dans une requête aussi.</text>
+</svg>

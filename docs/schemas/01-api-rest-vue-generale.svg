@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title>Fonctionnement général d'une API REST</title>
+  <defs>
+    <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="600" fill="#ffffff"/>
+
+  <text x="500" y="38" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Fonctionnement général d'une API REST</text>
+  <text x="500" y="64" text-anchor="middle" font-size="15" fill="#475569">Des clients différents parlent à la même API, avec le même langage : HTTP + JSON</text>
+
+  <!-- Clients -->
+  <rect x="20" y="92" width="240" height="300" rx="14" fill="#fff7ed" stroke="#fdba74" stroke-dasharray="6 4"/>
+  <text x="140" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#9a3412">CLIENTS</text>
+
+  <rect x="40" y="130" width="200" height="70" rx="10" fill="#ffffff" stroke="#fb923c" stroke-width="2"/>
+  <text x="140" y="160" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">Application mobile</text>
+  <text x="140" y="182" text-anchor="middle" font-size="13" fill="#6b7280">affiche le catalogue</text>
+
+  <rect x="40" y="215" width="200" height="70" rx="10" fill="#ffffff" stroke="#fb923c" stroke-width="2"/>
+  <text x="140" y="245" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">Site web</text>
+  <text x="140" y="267" text-anchor="middle" font-size="13" fill="#6b7280">back-office, boutique</text>
+
+  <rect x="40" y="300" width="200" height="70" rx="10" fill="#ff6c37" stroke="#ea580c" stroke-width="2"/>
+  <text x="140" y="330" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Postman</text>
+  <text x="140" y="352" text-anchor="middle" font-size="13" fill="#fff7ed">teste l'API à la main</text>
+
+  <!-- Flèches clients <-> API -->
+  <line x1="268" y1="205" x2="392" y2="205" stroke="#334155" stroke-width="2.5" marker-end="url(#fleche)"/>
+  <text x="330" y="190" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2937">Requête HTTP</text>
+  <text x="330" y="226" text-anchor="middle" font-size="12" font-family="Consolas, Menlo, monospace" fill="#475569">GET /api/produits</text>
+
+  <line x1="392" y1="285" x2="268" y2="285" stroke="#334155" stroke-width="2.5" marker-end="url(#fleche)"/>
+  <text x="330" y="270" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2937">Réponse HTTP</text>
+  <text x="330" y="306" text-anchor="middle" font-size="12" font-family="Consolas, Menlo, monospace" fill="#475569">200 OK + JSON</text>
+
+  <!-- API -->
+  <rect x="400" y="92" width="250" height="300" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="525" y="122" text-anchor="middle" font-size="18" font-weight="700" fill="#1e3a8a">API REST</text>
+  <text x="525" y="143" text-anchor="middle" font-size="13" fill="#3b5bdb">ASP.NET Core .NET 10</text>
+  <line x1="420" y1="156" x2="630" y2="156" stroke="#bfdbfe"/>
+  <text x="525" y="178" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Ressource : les produits</text>
+  <g font-family="Consolas, Menlo, monospace" font-size="13">
+    <text x="418" y="206" fill="#059669" font-weight="700">GET</text>    <text x="485" y="206" fill="#1f2937">/api/produits</text>
+    <text x="418" y="232" fill="#059669" font-weight="700">GET</text>    <text x="485" y="232" fill="#1f2937">/api/produits/3</text>
+    <text x="418" y="258" fill="#d97706" font-weight="700">POST</text>   <text x="485" y="258" fill="#1f2937">/api/produits</text>
+    <text x="418" y="284" fill="#2563eb" font-weight="700">PUT</text>    <text x="485" y="284" fill="#1f2937">/api/produits/3</text>
+    <text x="418" y="310" fill="#7c3aed" font-weight="700">PATCH</text>  <text x="485" y="310" fill="#1f2937">/api/produits/3</text>
+    <text x="418" y="336" fill="#dc2626" font-weight="700">DELETE</text> <text x="485" y="336" fill="#1f2937">/api/produits/3</text>
+  </g>
+  <text x="525" y="362" text-anchor="middle" font-size="12.5" fill="#475569">l'URL désigne la ressource,</text>
+  <text x="525" y="380" text-anchor="middle" font-size="12.5" fill="#475569">la méthode désigne l'action</text>
+
+  <!-- Flèches API <-> Données -->
+  <line x1="658" y1="215" x2="772" y2="215" stroke="#334155" stroke-width="2.5" marker-end="url(#fleche)"/>
+  <line x1="772" y1="270" x2="658" y2="270" stroke="#334155" stroke-width="2.5" marker-end="url(#fleche)"/>
+  <text x="715" y="203" text-anchor="middle" font-size="13" fill="#1f2937">lit / écrit</text>
+  <text x="715" y="292" text-anchor="middle" font-size="13" fill="#1f2937">données</text>
+
+  <!-- Données (cylindre) -->
+  <path d="M780,140 a95,22 0 0,1 190,0 v200 a95,22 0 0,1 -190,0 z" fill="#ecfdf5" stroke="#059669" stroke-width="2.5"/>
+  <ellipse cx="875" cy="140" rx="95" ry="22" fill="#d1fae5" stroke="#059669" stroke-width="2.5"/>
+  <text x="875" y="215" text-anchor="middle" font-size="18" font-weight="700" fill="#065f46">Données</text>
+  <text x="875" y="242" text-anchor="middle" font-size="13" fill="#047857">ici : une liste en mémoire</text>
+  <text x="875" y="262" text-anchor="middle" font-size="13" fill="#047857">(ProduitStore)</text>
+  <text x="875" y="292" text-anchor="middle" font-size="13" fill="#047857">en général : une base</text>
+  <text x="875" y="312" text-anchor="middle" font-size="13" fill="#047857">de données</text>
+
+  <!-- Analogie -->
+  <rect x="20" y="420" width="960" height="160" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="40" y="450" font-size="16" font-weight="700" fill="#0f172a">Analogie : le restaurant</text>
+
+  <rect x="40" y="468" width="260" height="92" rx="10" fill="#fff7ed" stroke="#fb923c"/>
+  <text x="170" y="496" text-anchor="middle" font-size="15" font-weight="700" fill="#9a3412">Le client</text>
+  <text x="170" y="518" text-anchor="middle" font-size="13" fill="#374151">passe commande à partir du menu</text>
+  <text x="170" y="540" text-anchor="middle" font-size="13" fill="#6b7280">= Postman, l'app, le site</text>
+
+  <line x1="308" y1="514" x2="362" y2="514" stroke="#334155" stroke-width="2" marker-end="url(#fleche)" marker-start="url(#fleche)"/>
+
+  <rect x="370" y="468" width="260" height="92" rx="10" fill="#eff6ff" stroke="#2563eb"/>
+  <text x="500" y="496" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a">Le serveur (en salle)</text>
+  <text x="500" y="518" text-anchor="middle" font-size="13" fill="#374151">prend la commande, rapporte le plat</text>
+  <text x="500" y="540" text-anchor="middle" font-size="13" fill="#6b7280">= l'API</text>
+
+  <line x1="638" y1="514" x2="692" y2="514" stroke="#334155" stroke-width="2" marker-end="url(#fleche)" marker-start="url(#fleche)"/>
+
+  <rect x="700" y="468" width="260" height="92" rx="10" fill="#ecfdf5" stroke="#059669"/>
+  <text x="830" y="496" text-anchor="middle" font-size="15" font-weight="700" fill="#065f46">La cuisine</text>
+  <text x="830" y="518" text-anchor="middle" font-size="13" fill="#374151">prépare, le client ne la voit pas</text>
+  <text x="830" y="540" text-anchor="middle" font-size="13" fill="#6b7280">= code métier + données</text>
+</svg>

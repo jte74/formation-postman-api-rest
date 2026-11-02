@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title>Comparaison des méthodes HTTP</title>
+  <rect width="1000" height="560" fill="#ffffff"/>
+
+  <text x="500" y="36" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Les 5 méthodes HTTP d'une API REST</text>
+  <text x="500" y="62" text-anchor="middle" font-size="15" fill="#475569">Même ressource (/api/produits), actions différentes : c'est la méthode qui dit ce qu'on veut faire</text>
+
+  <!-- En-tête du tableau -->
+  <rect x="20" y="82" width="960" height="44" rx="8" fill="#0f172a"/>
+  <g font-size="13.5" font-weight="700" fill="#ffffff">
+    <text x="40" y="109">Méthode</text>
+    <text x="150" y="109">Action (CRUD)</text>
+    <text x="330" y="109">Exemple</text>
+    <text x="590" y="109">Body envoyé</text>
+    <text x="700" y="109">Succès</text>
+    <text x="842" y="109">Idempotente*</text>
+  </g>
+
+  <!-- GET -->
+  <rect x="20" y="132" width="960" height="62" rx="8" fill="#ecfdf5"/>
+  <rect x="32" y="146" width="92" height="34" rx="6" fill="#059669"/>
+  <text x="78" y="169" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">GET</text>
+  <text x="150" y="160" font-size="14" font-weight="700" fill="#1f2937">Lire</text>
+  <text x="150" y="180" font-size="12.5" fill="#4b5563">Read</text>
+  <text x="330" y="160" font-size="13" font-family="Consolas, Menlo, monospace" fill="#1f2937">GET /api/produits</text>
+  <text x="330" y="180" font-size="13" font-family="Consolas, Menlo, monospace" fill="#1f2937">GET /api/produits/3</text>
+  <text x="590" y="170" font-size="14" fill="#1f2937">Non</text>
+  <text x="700" y="170" font-size="14" font-weight="700" fill="#047857">200 OK</text>
+  <text x="842" y="170" font-size="14" fill="#1f2937">Oui (et sûre**)</text>
+
+  <!-- POST -->
+  <rect x="20" y="200" width="960" height="62" rx="8" fill="#fffbeb"/>
+  <rect x="32" y="214" width="92" height="34" rx="6" fill="#d97706"/>
+  <text x="78" y="237" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">POST</text>
+  <text x="150" y="228" font-size="14" font-weight="700" fill="#1f2937">Créer</text>
+  <text x="150" y="248" font-size="12.5" fill="#4b5563">Create</text>
+  <text x="330" y="228" font-size="13" font-family="Consolas, Menlo, monospace" fill="#1f2937">POST /api/produits</text>
+  <text x="330" y="248" font-size="12.5" fill="#4b5563">l'id est attribué par le serveur</text>
+  <text x="590" y="238" font-size="14" fill="#1f2937">Oui (complet)</text>
+  <text x="700" y="230" font-size="14" font-weight="700" fill="#047857">201 Created</text>
+  <text x="700" y="249" font-size="12" fill="#4b5563">+ header Location</text>
+  <text x="842" y="238" font-size="14" font-weight="700" fill="#b91c1c">Non</text>
+
+  <!-- PUT -->
+  <rect x="20" y="268" width="960" height="62" rx="8" fill="#eff6ff"/>
+  <rect x="32" y="282" width="92" height="34" rx="6" fill="#2563eb"/>
+  <text x="78" y="305" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">PUT</text>
+  <text x="150" y="296" font-size="14" font-weight="700" fill="#1f2937">Remplacer</text>
+  <text x="150" y="316" font-size="12.5" fill="#4b5563">Update (tout)</text>
+  <text x="330" y="296" font-size="13" font-family="Consolas, Menlo, monospace" fill="#1f2937">PUT /api/produits/3</text>
+  <text x="330" y="316" font-size="12.5" fill="#4b5563">tous les champs sont remplacés</text>
+  <text x="590" y="306" font-size="14" fill="#1f2937">Oui (complet)</text>
+  <text x="700" y="298" font-size="14" font-weight="700" fill="#047857">200 OK</text>
+  <text x="700" y="317" font-size="12" fill="#4b5563">ou 204 No Content</text>
+  <text x="842" y="306" font-size="14" fill="#1f2937">Oui</text>
+
+  <!-- PATCH -->
+  <rect x="20" y="336" width="960" height="62" rx="8" fill="#f5f3ff"/>
+  <rect x="32" y="350" width="92" height="34" rx="6" fill="#7c3aed"/>
+  <text x="78" y="373" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">PATCH</text>
+  <text x="150" y="364" font-size="14" font-weight="700" fill="#1f2937">Modifier</text>
+  <text x="150" y="384" font-size="12.5" fill="#4b5563">Update (partiel)</text>
+  <text x="330" y="364" font-size="13" font-family="Consolas, Menlo, monospace" fill="#1f2937">PATCH /api/produits/3</text>
+  <text x="330" y="384" font-size="12.5" fill="#4b5563">seuls les champs envoyés changent</text>
+  <text x="590" y="374" font-size="14" fill="#1f2937">Oui (partiel)</text>
+  <text x="700" y="374" font-size="14" font-weight="700" fill="#047857">200 OK</text>
+  <text x="842" y="366" font-size="14" fill="#1f2937">Pas garantie</text>
+  <text x="842" y="385" font-size="12" fill="#4b5563">(oui dans notre API)</text>
+
+  <!-- DELETE -->
+  <rect x="20" y="404" width="960" height="62" rx="8" fill="#fef2f2"/>
+  <rect x="32" y="418" width="92" height="34" rx="6" fill="#dc2626"/>
+  <text x="78" y="441" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">DELETE</text>
+  <text x="150" y="432" font-size="14" font-weight="700" fill="#1f2937">Supprimer</text>
+  <text x="150" y="452" font-size="12.5" fill="#4b5563">Delete</text>
+  <text x="330" y="432" font-size="13" font-family="Consolas, Menlo, monospace" fill="#1f2937">DELETE /api/produits/3</text>
+  <text x="330" y="452" font-size="12.5" fill="#4b5563">réservé au rôle Admin ici</text>
+  <text x="590" y="442" font-size="14" fill="#1f2937">Non</text>
+  <text x="700" y="442" font-size="14" font-weight="700" fill="#047857">204 No Content</text>
+  <text x="842" y="442" font-size="14" fill="#1f2937">Oui</text>
+
+  <!-- Notes -->
+  <text x="20" y="500" font-size="13" fill="#374151"><tspan font-weight="700">* Idempotente</tspan> : envoyer 1 fois ou 10 fois la même requête laisse le serveur dans le même état (ex. : supprimer le produit 3).</text>
+  <text x="20" y="522" font-size="13" fill="#374151"><tspan font-weight="700">** Sûre</tspan> : ne modifie rien sur le serveur. Seule GET (avec HEAD et OPTIONS) est sûre : on peut l'envoyer sans risque.</text>
+  <text x="20" y="544" font-size="13" fill="#374151"><tspan font-weight="700">CRUD</tspan> = Create, Read, Update, Delete : les 4 opérations de base sur des données.</text>
+</svg>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="1000" height="500" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title>Anatomie d'une URL : paramètres de route et query parameters</title>
+  <rect width="1000" height="500" fill="#ffffff"/>
+
+  <text x="500" y="36" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Anatomie d'une URL</text>
+  <text x="500" y="62" text-anchor="middle" font-size="15" fill="#475569">Paramètre de route = QUELLE ressource. Query parameters = COMMENT filtrer, trier, paginer.</text>
+
+  <!-- Exemple 1 : paramètre de route -->
+  <text x="30" y="108" font-size="15" font-weight="700" fill="#0f172a">Exemple 1 — un produit précis (paramètre de route)</text>
+  <g font-family="Consolas, Menlo, monospace" font-size="22" font-weight="700">
+    <text x="30" y="150"><tspan fill="#64748b">http://</tspan><tspan fill="#0369a1">localhost</tspan><tspan fill="#64748b">:</tspan><tspan fill="#7c3aed">5080</tspan><tspan fill="#047857">/api/produits/</tspan><tspan fill="#dc2626">3</tspan></text>
+  </g>
+  <!-- accolades : largeur caractère ≈ 13.2 px -->
+  <g stroke-width="2" fill="none">
+    <path d="M30,160 v8 h88 v-8" stroke="#64748b"/>
+    <path d="M122,160 v8 h114 v-8" stroke="#0369a1"/>
+    <path d="M253,160 v8 h50 v-8" stroke="#7c3aed"/>
+    <path d="M307,160 v8 h182 v-8" stroke="#047857"/>
+    <path d="M493,160 v8 h12 v-8" stroke="#dc2626"/>
+  </g>
+  <g font-size="13" font-weight="700">
+    <text x="74" y="188" text-anchor="middle" fill="#64748b">protocole</text>
+    <text x="179" y="188" text-anchor="middle" fill="#0369a1">hôte (machine)</text>
+    <text x="278" y="188" text-anchor="middle" fill="#7c3aed">port</text>
+    <text x="398" y="188" text-anchor="middle" fill="#047857">chemin (path)</text>
+    <text x="499" y="188" text-anchor="middle" fill="#dc2626">id</text>
+  </g>
+  <rect x="560" y="122" width="410" height="80" rx="10" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="576" y="146" font-size="13.5" font-weight="700" fill="#b91c1c">Paramètre de route : /api/produits/{id}</text>
+  <text x="576" y="166" font-size="12.5" fill="#374151">fait partie du chemin, obligatoire, identifie UNE ressource.</text>
+  <text x="576" y="186" font-size="12.5" fill="#374151">Dans Postman : <tspan font-family="Consolas, Menlo, monospace">/api/produits/:id</tspan> → onglet Params</text>
+
+  <!-- Exemple 2 : query parameters -->
+  <text x="30" y="250" font-size="15" font-weight="700" fill="#0f172a">Exemple 2 — une liste filtrée (query parameters)</text>
+  <g font-family="Consolas, Menlo, monospace" font-size="20" font-weight="700">
+    <text x="30" y="292"><tspan fill="#047857">/api/produits</tspan><tspan fill="#0f172a">?</tspan><tspan fill="#b45309">categorie</tspan><tspan fill="#0f172a">=</tspan><tspan fill="#2563eb">Audio</tspan><tspan fill="#0f172a">&amp;</tspan><tspan fill="#b45309">tri</tspan><tspan fill="#0f172a">=</tspan><tspan fill="#2563eb">prix</tspan><tspan fill="#0f172a">&amp;</tspan><tspan fill="#b45309">ordre</tspan><tspan fill="#0f172a">=</tspan><tspan fill="#2563eb">desc</tspan></text>
+  </g>
+  <!-- largeur caractère ≈ 12 px -->
+  <g stroke-width="2" fill="none">
+    <path d="M30,302 v8 h154 v-8" stroke="#047857"/>
+    <path d="M186,302 v8 h10 v-8" stroke="#0f172a"/>
+    <path d="M198,302 v8 h178 v-8" stroke="#b45309"/>
+    <path d="M378,302 v8 h10 v-8" stroke="#0f172a"/>
+    <path d="M390,302 v8 h94 v-8" stroke="#b45309"/>
+    <path d="M487,302 v8 h10 v-8" stroke="#0f172a"/>
+    <path d="M499,302 v8 h118 v-8" stroke="#b45309"/>
+  </g>
+  <g font-size="13" font-weight="700">
+    <text x="107" y="330" text-anchor="middle" fill="#047857">chemin</text>
+    <text x="191" y="352" text-anchor="middle" fill="#0f172a">? début</text>
+    <text x="287" y="330" text-anchor="middle" fill="#b45309">clé = valeur</text>
+    <text x="383" y="352" text-anchor="middle" fill="#0f172a">&amp; sépare</text>
+    <text x="437" y="330" text-anchor="middle" fill="#b45309">clé = valeur</text>
+    <text x="558" y="330" text-anchor="middle" fill="#b45309">clé = valeur</text>
+  </g>
+  <rect x="720" y="262" width="250" height="100" rx="10" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="736" y="286" font-size="13.5" font-weight="700" fill="#b45309">Query parameters</text>
+  <text x="736" y="306" font-size="12.5" fill="#374151">après le « ? », séparés par « &amp; »,</text>
+  <text x="736" y="326" font-size="12.5" fill="#374151">facultatifs, ordre sans importance.</text>
+  <text x="736" y="346" font-size="12.5" fill="#374151">Postman : tableau Query Params</text>
+
+  <!-- Comparatif -->
+  <rect x="30" y="384" width="940" height="100" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="50" y="410" font-size="14" font-weight="700" fill="#0f172a">Comment choisir ?</text>
+  <text x="50" y="434" font-size="13" fill="#374151"><tspan font-weight="700" fill="#dc2626">Route</tspan> : « le produit n° 3 » → <tspan font-family="Consolas, Menlo, monospace">/api/produits/3</tspan>. Absent ou inconnu → 404 (pas de produit).</text>
+  <text x="50" y="456" font-size="13" fill="#374151"><tspan font-weight="700" fill="#b45309">Query</tspan> : « les produits audio, triés par prix » → <tspan font-family="Consolas, Menlo, monospace">/api/produits?categorie=Audio&amp;tri=prix</tspan>. Aucun résultat → 200 et [ ].</text>
+  <text x="50" y="476" font-size="12.5" fill="#6b7280">Les caractères spéciaux (espace, &amp;, é...) sont encodés automatiquement par Postman : un espace devient %20.</text>
+</svg>
