@@ -9,7 +9,7 @@ Ce document explique comment installer les outils, ouvrir la solution dans Visua
 | Outil | Version | Rôle | Où le trouver |
 |---|---|---|---|
 | **SDK .NET 10** | 10.0.100 ou plus récent | Compiler et exécuter l'API | https://dotnet.microsoft.com/download/dotnet/10.0 (installé automatiquement avec Visual Studio 2026) |
-| **Visual Studio 2026** | toute édition (Community gratuite) | Ouvrir la solution `.sln`, lancer et déboguer l'API | https://visualstudio.microsoft.com/ — charge de travail **« Développement web et ASP.NET »** |
+| **Visual Studio 2026**, ou Visual Studio 2022 **version 17.14 ou plus récente** | toute édition (Community gratuite) | Ouvrir la solution `.sln`, lancer et déboguer l'API | https://visualstudio.microsoft.com/ — charge de travail **« Développement web et ASP.NET »**. Le SDK .NET 10 exige MSBuild 17.14 : une version plus ancienne de Visual Studio 2022 ne le voit pas |
 | **Postman (application de bureau)** | version récente (v11 ou plus) | Envoyer les requêtes | https://www.postman.com/downloads/ |
 | **Compte Postman** | gratuit | Postman demande une connexion au démarrage | à créer sur https://www.postman.com/ |
 | Connexion Internet | — | **Uniquement** pour le premier build (téléchargement de 2 paquets NuGet) et la connexion à Postman | — |
@@ -283,7 +283,7 @@ Après une réinitialisation, le premier produit créé reçoit l'**id 11**.
 | Postman : `Error: getaddrinfo ENOTFOUND {{baseUrl}}` ou *Invalid URL* | Aucun environnement sélectionné | Sélectionner *Formation API REST - Local* en haut à droite |
 | Postman : `Error: connect ECONNREFUSED 127.0.0.1:5080` | L'API n'est pas lancée (ou s'est arrêtée) | Lancer l'API (F5 ou `dotnet run`) et vérifier la console |
 | Console : `Failed to bind to address http://127.0.0.1:5080: address already in use` | Une autre instance de l'API (ou un autre programme) utilise le port | Fermer l'autre instance ; sinon changer le port dans `launchSettings.json` **et** `baseUrl` |
-| Visual Studio : `NETSDK1045 : le SDK .NET actuel ne prend pas en charge .NET 10.0` | SDK .NET 10 absent | Installer le SDK .NET 10 / mettre à jour Visual Studio |
+| Visual Studio : `NETSDK1045 : le SDK .NET actuel ne prend pas en charge le ciblage .NET 10.0` | SDK .NET 10 absent, ou Visual Studio 2022 antérieur à 17.14 | 1) Installer le **SDK .NET 10** (x64) : https://dotnet.microsoft.com/download/dotnet/10.0 ; 2) mettre à jour Visual Studio 2022 en **17.14+** (*Visual Studio Installer > Mettre à jour*) ou installer Visual Studio 2026 ; en attendant, `dotnet run` dans `src/ProduitsApi` fonctionne avec le SDK seul. **Dernier recours :** la branche `net8` du dépôt (version identique ciblant .NET 8) |
 | Visual Studio : erreur de restauration NuGet | Pas d'accès Internet au premier build | Se connecter à Internet et recompiler (les paquets sont ensuite en cache) |
 | Profil `https` sélectionné : avertissement de certificat | Certificat de développement HTTPS non approuvé | Repasser sur le profil `http` (recommandé pour la formation) |
 | Postman : `SSL Error: Self signed certificate` (si `baseUrl` en https) | Certificat local non reconnu | Utiliser `http://localhost:5080`, ou désactiver *Settings > General > SSL certificate verification* |

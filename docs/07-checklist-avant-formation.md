@@ -9,7 +9,7 @@
 ### Poste et logiciels
 
 - [ ] **SDK .NET 10** installé : `dotnet --list-sdks` affiche une ligne `10.0.x`.
-- [ ] **Visual Studio 2026** installé avec la charge de travail **Développement web et ASP.NET** (ou VS Code + C# Dev Kit, ou Rider).
+- [ ] **Visual Studio 2026** (ou Visual Studio 2022 **17.14+**, *Aide > À propos*) installé avec la charge de travail **Développement web et ASP.NET** (ou VS Code + C# Dev Kit, ou Rider).
 - [ ] **Postman** (application de bureau) installé et à jour.
 - [ ] **Compte Postman** créé ; connexion testée (Postman l'exige au démarrage).
 - [ ] Si l'apprenant utilise son propre poste : mêmes vérifications sur son poste (ou prévoir de travailler sur le poste du formateur).
@@ -70,6 +70,7 @@
 | Problème le jour J | Solution de repli |
 |---|---|
 | Visual Studio ne démarre pas / ne compile pas | `cd src/ProduitsApi` puis `dotnet run` dans un terminal |
+| `NETSDK1045` (pas de SDK .NET 10) et impossible d'installer quoi que ce soit | Branche **`net8`** du dépôt : `git checkout net8` (ou *Code > Download ZIP* sur cette branche). Même API, même collection, en .NET 8 |
 | Port 5080 occupé | `dotnet run --urls http://localhost:5090`, puis `baseUrl` = `http://localhost:5090` dans l'environnement |
 | Pas d'Internet pour la connexion Postman | Postman garde la session ouverte s'il a été connecté la veille ; sinon, utiliser le fichier `src/ProduitsApi/ProduitsApi.http` de Visual Studio (mêmes notions : méthode, URL, headers, body) |
 | La collection a été modifiée par erreur | La réimporter depuis `postman/` (choisir *Replace* ou *Import as copy*) |
