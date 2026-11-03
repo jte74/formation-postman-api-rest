@@ -13,7 +13,7 @@ namespace ProduitsApi.Services;
 /// </summary>
 public class ProduitStore
 {
-    private readonly Lock _verrou = new();
+    private readonly object _verrou = new();
     private readonly List<Produit> _produits = [];
     private int _dernierId;
 

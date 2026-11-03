@@ -1,5 +1,5 @@
 // =====================================================================================
-//  API Produits - formation "Postman et API REST" (ASP.NET Core .NET 10)
+//  API Produits - formation "Postman et API REST" (ASP.NET Core .NET 8 - version de secours)
 //
 //  Point d'entrée de l'application. Ce fichier fait deux choses :
 //    1. il ENREGISTRE les services (builder.Services...) : contrôleurs, authentification, erreurs...
@@ -78,9 +78,6 @@ builder.Services.ConfigureHttpJsonOptions(options => ConfigurerJson(options.Seri
 builder.Services.AddProblemDetails(options => options.CustomizeProblemDetails = ProblemDetailsEnFrancais.Personnaliser);
 builder.Services.AddExceptionHandler<GestionnaireErreursGlobal>();
 
-// Description OpenAPI de l'API (importable dans Postman) : /openapi/v1.json
-builder.Services.AddOpenApi();
-
 // ---- Authentification par Bearer Token (JWT) ----------------------------------------
 var sectionJwt = builder.Configuration.GetSection("Jwt");
 builder.Services.Configure<ParametresJwt>(sectionJwt);
@@ -158,7 +155,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // e) Endpoints.
-app.MapOpenApi();       // GET /openapi/v1.json
 app.MapControllers();   // routes définies par les attributs [Route], [HttpGet]... des contrôleurs
 
 // Message d'aide affiché au démarrage dans la console.

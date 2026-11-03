@@ -16,7 +16,6 @@ public class AccueilController : ControllerBase
         api = "API Produits - formation Postman et API REST",
         version = "1.0",
         message = "L'API fonctionne. Utilisez Postman pour envoyer vos requêtes.",
-        documentationOpenApi = "/openapi/v1.json",
         comptesDeDemonstration = new[]
         {
             new { nomUtilisateur = "admin", motDePasse = "Admin123!", role = "Admin" },
@@ -43,7 +42,7 @@ public class AccueilController : ControllerBase
     public IActionResult Ping() => Ok(new
     {
         message = "pong",
-        serveur = "API Produits (ASP.NET Core .NET 10)",
+        serveur = "API Produits (ASP.NET Core .NET 8)",
         heureServeur = DateTimeOffset.Now
     });
 }

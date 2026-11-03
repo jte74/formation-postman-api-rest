@@ -1,5 +1,11 @@
 # Formation Postman et API REST — kit clé en main
 
+> **🛟 Branche `net8` : version de secours en .NET 8.**
+> Elle est destinée aux postes qui n'ont que le SDK .NET 8 (erreur `NETSDK1045 : le SDK .NET actuel ne prend pas en charge le ciblage .NET 10.0`).
+> La version de référence du kit est en **.NET 10**, sur la branche `main`.
+> Différences avec `main` : projet ciblant `net8.0`, paquet `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.33, pas d'endpoint `/openapi/v1.json` (bonus facultatif du cours). Tout le reste est identique : endpoints, codes de réponse, messages d'erreur, collection et environnement Postman (37 requêtes, 110 tests réussis).
+> Dans les documents, lire « .NET 8 » partout où il est écrit « .NET 10 ».
+
 Kit complet pour animer une formation **pratique** d'au moins **1 heure** (programme principal : **1 h 30**) destinée à un **débutant** : comprendre les API REST et le protocole HTTP, et maîtriser l'essentiel de **Postman**.
 
 Le kit contient :
